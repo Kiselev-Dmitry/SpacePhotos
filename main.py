@@ -6,18 +6,18 @@ from dotenv import load_dotenv
 import datetime
 
 
-def fetch_spacex_last_launch(spacex_url, dir):
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    response = requests.get(spacex_url)
-    response.raise_for_status()
-    images = response.json()["links"]["flickr"]["original"]
-    for i, image in enumerate(images):
-        response = requests.get(image)
-        response.raise_for_status()
-        filename = '{}/hubble{}.jpeg'.format(dir,str(i))
-        with open(filename, 'wb') as file:
-            file.write(response.content)
+# def fetch_spacex_last_launch(spacex_url, dir):
+#     if not os.path.exists(dir):
+#         os.makedirs(dir)
+#     response = requests.get(spacex_url)
+#     response.raise_for_status()
+#     images = response.json()["links"]["flickr"]["original"]
+#     for i, image in enumerate(images):
+#         response = requests.get(image)
+#         response.raise_for_status()
+#         filename = '{}/hubble{}.jpeg'.format(dir,str(i))
+#         with open(filename, 'wb') as file:
+#             file.write(response.content)
 
 
 def get_nasa_apod(nasa_apod_url, nasa_token, dir):
@@ -70,12 +70,12 @@ def get_ext(record_url):
 
 if __name__ == "__main__":
     load_dotenv()
-    spacex_token = os.environ["SPACEX_TOKEN"]
+#    spacex_id = os.environ["SPACEX_ID"]
     nasa_token = os.environ["NASA_TOKEN"]
-    dir = "images"
+    dir = "images" #  Решить где должен указываться dir  - в main или в fetch ???
 
-    spacex_url = "https://api.spacexdata.com/v5/launches/{}".format(spacex_token)
-    fetch_spacex_last_launch(spacex_url, dir)
+#    spacex_url = "https://api.spacexdata.com/v5/launches/{}".format(spacex_token)
+#    fetch_spacex_last_launch(spacex_url, dir)
 
     nasa_apod_url  = "https://api.nasa.gov/planetary/apod"
     get_nasa_apod(nasa_apod_url, nasa_token, dir)
