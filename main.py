@@ -39,28 +39,28 @@ import datetime
 #                 file.write(response.content)
 
 
-def get_nasa_epic(nasa_epic_url, nasa_token, dir):
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    payload = {"api_key": nasa_token}
-    response = requests.get(nasa_epic_url, params=payload)
-    response.raise_for_status()
-    records = response.json()
-    print(response.json()[0]["image"]) # Отладочный код
-    for i, record in enumerate(records):
-        photo_name = record["image"]
-        photo_date_str = record["date"]
-        photo_date = datetime.datetime.strptime(photo_date_str, '%Y-%m-%d %H:%M:%S')
-        photo_url = "https://api.nasa.gov/EPIC/archive/natural/{}/png/{}.png".format(
-            photo_date.strftime('%Y/%m/%d'), photo_name)
-        print(i) # Отладочный код
-#        print(photo_url) # Отладочный код
-        response = requests.get(photo_url, params=payload)
-        response.raise_for_status()
-        filename = '{}/nasa_epic_{}.png'.format(dir,str(i))
-        with open(filename, 'wb') as file:
-             file.write(response.content)
-        if i == 6: break # Ограничиваем кол-во фотографий, т.к. очень долго грузятся
+# def get_nasa_epic(nasa_epic_url, nasa_token, dir):
+#     if not os.path.exists(dir):
+#         os.makedirs(dir)
+#     payload = {"api_key": nasa_token}
+#     response = requests.get(nasa_epic_url, params=payload)
+#     response.raise_for_status()
+#     records = response.json()
+#     print(response.json()[0]["image"]) # Отладочный код
+#     for i, record in enumerate(records):
+#         photo_name = record["image"]
+#         photo_date_str = record["date"]
+#         photo_date = datetime.datetime.strptime(photo_date_str, '%Y-%m-%d %H:%M:%S')
+#         photo_url = "https://api.nasa.gov/EPIC/archive/natural/{}/png/{}.png".format(
+#             photo_date.strftime('%Y/%m/%d'), photo_name)
+#         print(i) # Отладочный код
+# #        print(photo_url) # Отладочный код
+#         response = requests.get(photo_url, params=payload)
+#         response.raise_for_status()
+#         filename = '{}/nasa_epic_{}.png'.format(dir,str(i))
+#         with open(filename, 'wb') as file:
+#              file.write(response.content)
+#         if i == 6: break # Ограничиваем кол-во фотографий, т.к. очень долго грузятся
 
 # def get_ext(record_url):
 #     parsed_path = urlparse(record_url).path
