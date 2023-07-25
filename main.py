@@ -20,23 +20,23 @@ import datetime
 #             file.write(response.content)
 
 
-def get_nasa_apod(nasa_apod_url, nasa_token, dir):
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    payload = {"api_key": nasa_token,
-               "count": "5"}
-    response = requests.get(nasa_apod_url, params=payload)
-    response.raise_for_status()
-    records = response.json()
-#    print(records) # Отладочный код
-    for i, record in enumerate(records):
-        if record["media_type"] != "video":
-            record_url = record["url"]
-            response = requests.get(record_url)
-            response.raise_for_status()
-            filename = '{}/nasa_apod_{}{}'.format(dir,str(i), get_ext(record_url))
-            with open(filename, 'wb') as file:
-                file.write(response.content)
+# def get_nasa_apod(nasa_apod_url, nasa_token, dir):
+#     if not os.path.exists(dir):
+#         os.makedirs(dir)
+#     payload = {"api_key": nasa_token,
+#                "count": "5"}
+#     response = requests.get(nasa_apod_url, params=payload)
+#     response.raise_for_status()
+#     records = response.json()
+# #    print(records) # Отладочный код
+#     for i, record in enumerate(records):
+#         if record["media_type"] != "video":
+#             record_url = record["url"]
+#             response = requests.get(record_url)
+#             response.raise_for_status()
+#             filename = '{}/nasa_apod_{}{}'.format(dir,str(i), get_ext(record_url))
+#             with open(filename, 'wb') as file:
+#                 file.write(response.content)
 
 
 def get_nasa_epic(nasa_epic_url, nasa_token, dir):
@@ -62,23 +62,20 @@ def get_nasa_epic(nasa_epic_url, nasa_token, dir):
              file.write(response.content)
         if i == 6: break # Ограничиваем кол-во фотографий, т.к. очень долго грузятся
 
-def get_ext(record_url):
-    parsed_path = urlparse(record_url).path
-    result = os.path.splitext(parsed_path)
-    return result[1]
+# def get_ext(record_url):
+#     parsed_path = urlparse(record_url).path
+#     result = os.path.splitext(parsed_path)
+#     return result[1]
 
 
 if __name__ == "__main__":
     load_dotenv()
 #    spacex_id = os.environ["SPACEX_ID"]
     nasa_token = os.environ["NASA_TOKEN"]
-    dir = "images" #  Решить где должен указываться dir  - в main или в fetch ???
+    dir = "images"
 
-#    spacex_url = "https://api.spacexdata.com/v5/launches/{}".format(spacex_token)
-#    fetch_spacex_last_launch(spacex_url, dir)
-
-    nasa_apod_url  = "https://api.nasa.gov/planetary/apod"
-    get_nasa_apod(nasa_apod_url, nasa_token, dir)
+#    nasa_apod_url  = "https://api.nasa.gov/planetary/apod"
+#    get_nasa_apod(nasa_apod_url, nasa_token, dir)
 
     nasa_epic_url  = "https://api.nasa.gov/EPIC/api/natural/images"
     get_nasa_epic(nasa_epic_url, nasa_token, dir)
