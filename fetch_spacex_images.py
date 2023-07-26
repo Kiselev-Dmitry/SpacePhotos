@@ -1,6 +1,7 @@
 import requests
-import os
 import argparse
+
+from file_operations import save_file
 
 
 def create_parser():
@@ -13,21 +14,15 @@ def fetch_spacex_last_launch(dir):
     parser = create_parser()
     namespace = parser.parse_args()
     spacex_url = "https://api.spacexdata.com/v5/launches/{}".format(namespace.launch_id)
-
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-
     response = requests.get(spacex_url)
     response.raise_for_status()
     images = response.json()["links"]["flickr"]["original"]
-#    print(images) # отладочный код
     for i, image in enumerate(images):
         response = requests.get(image)
-#        print(image)  # отладочный код
         response.raise_for_status()
-        filename = '{}/hubble{}.jpeg'.format(dir,str(i))
-        with open(filename, 'wb') as file:
-            file.write(response.content)
+        topic = "spacex"
+        ext = ".jpeg"
+        save_file(response, dir, topic, i, ext)
 
 
 if __name__ == "__main__":

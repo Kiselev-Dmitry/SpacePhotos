@@ -1,27 +1,27 @@
 import requests
 import os
 from dotenv import load_dotenv
-import datetime
+from datetime import datetime
+
+from file_operations import save_file
 
 
 def fetch_nasa_epic(nasa_token, epic_count, dir):
-    if not os.path.exists(dir):  # "Этот код вынести в общий файл
-        os.makedirs(dir)
     payload = {"api_key": nasa_token}
     response = requests.get("https://api.nasa.gov/EPIC/api/natural/images", params=payload)
     response.raise_for_status()
     records = response.json()
     for i, record in enumerate(records):
         photo_name = record["image"]
-        photo_date_str = record["date"]
-        photo_date = datetime.datetime.strptime(photo_date_str, '%Y-%m-%d %H:%M:%S')
+        photo_date_date = datetime.fromisoformat(record["date"]).date()
+        photo_date_str = str(photo_date_date).replace("-", "/")
         photo_url = "https://api.nasa.gov/EPIC/archive/natural/{}/png/{}.png".format(
-            photo_date.strftime('%Y/%m/%d'), photo_name)
+            photo_date_str, photo_name)
         response = requests.get(photo_url, params=payload)
         response.raise_for_status()
-        filename = '{}/nasa_epic_{}.png'.format(dir,str(i)) # "Этот код вынести в общий файл, ХОТЯ НЕ ФАКТ
-        with open(filename, 'wb') as file:
-             file.write(response.content)
+        topic = "nasa_epic"
+        ext = ".png"
+        save_file(response, dir, topic, i, ext)
         if i == int(epic_count): break  # Ограничиваем кол-во фотографий, т.к. очень долго грузятся
 
 

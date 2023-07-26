@@ -3,10 +3,10 @@ from urllib.parse import urlparse
 import os
 from dotenv import load_dotenv
 
+from file_operations import save_file
+
 
 def fetch_nasa_apod(nasa_token, apod_count, dir):
-    if not os.path.exists(dir):
-        os.makedirs(dir)
     payload = {"api_key": nasa_token,
                "count": apod_count}
     response = requests.get("https://api.nasa.gov/planetary/apod", params=payload)
@@ -17,9 +17,9 @@ def fetch_nasa_apod(nasa_token, apod_count, dir):
             record_url = record["url"]
             response = requests.get(record_url)
             response.raise_for_status()
-            filename = '{}/nasa_apod_{}{}'.format(dir,str(i), get_ext(record_url))
-            with open(filename, 'wb') as file:
-                file.write(response.content)
+            topic = "nasa_apod"
+            ext = get_ext(record_url)
+            save_file(response, dir, topic, i, ext)
 
 
 def get_ext(record_url):
