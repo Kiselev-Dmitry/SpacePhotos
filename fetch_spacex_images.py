@@ -6,7 +6,7 @@ from file_operations import save_file
 
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-launch_id', default='latest') # ???
+    parser.add_argument('-launch_id', default='latest')
     return parser
 
 
