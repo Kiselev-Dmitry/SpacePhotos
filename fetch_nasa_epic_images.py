@@ -6,7 +6,7 @@ from datetime import datetime
 from file_operations import save_file
 
 
-def fetch_nasa_epic(nasa_token, epic_count, dir):
+def fetch_nasa_epic(nasa_token, epic_count, photo_dir):
     payload = {"api_key": nasa_token}
     response = requests.get("https://api.nasa.gov/EPIC/api/natural/images", params=payload)
     response.raise_for_status()
@@ -21,7 +21,7 @@ def fetch_nasa_epic(nasa_token, epic_count, dir):
         response.raise_for_status()
         topic = "nasa_epic"
         ext = ".png"
-        save_file(response, dir, topic, i, ext)
+        save_file(response, photo_dir, topic, i, ext)
         if i == int(epic_count): break  # Ограничиваем кол-во фотографий, т.к. очень долго грузятся
 
 
@@ -29,5 +29,5 @@ if __name__ == "__main__":
     load_dotenv()
     nasa_token = os.environ["NASA_TOKEN"]
     epic_count = os.environ["EPIC_COUNT"]
-    dir = "images"
-    fetch_nasa_epic(nasa_token, epic_count, dir)
+    photo_dir = os.environ["DIR_WITH_PHOTOS"]
+    fetch_nasa_epic(nasa_token, epic_count, photo_dir)

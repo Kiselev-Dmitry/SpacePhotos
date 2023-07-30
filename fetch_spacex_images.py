@@ -1,5 +1,7 @@
 import requests
+import os
 import argparse
+from dotenv import load_dotenv
 
 from file_operations import save_file
 
@@ -10,7 +12,7 @@ def create_parser():
     return parser
 
 
-def fetch_spacex_last_launch(dir):
+def fetch_spacex_last_launch(photo_dir):
     parser = create_parser()
     namespace = parser.parse_args()
     spacex_url = "https://api.spacexdata.com/v5/launches/{}".format(namespace.launch_id)
@@ -22,9 +24,10 @@ def fetch_spacex_last_launch(dir):
         response.raise_for_status()
         topic = "spacex"
         ext = ".jpeg"
-        save_file(response, dir, topic, i, ext)
+        save_file(response, photo_dir, topic, i, ext)
 
 
 if __name__ == "__main__":
-    dir = "images"
-    fetch_spacex_last_launch(dir)
+    load_dotenv()
+    photo_dir = os.environ["DIR_WITH_PHOTOS"]
+    fetch_spacex_last_launch(photo_dir)

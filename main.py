@@ -23,7 +23,6 @@ if __name__ == "__main__":
     namespace = parser.parse_args()
     if namespace.file: image = namespace.file
     else: image = random.choice(images)
-    print(image) # отладочный код
     bot.send_document(chat_id=chat_id, document=open('{}/{}'.format(photo_dir, image), 'rb'))
 
 
