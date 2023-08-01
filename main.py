@@ -22,7 +22,7 @@ def main():
         image = random.choice(images)
     filename = '{}/{}'.format(photo_dir, image)
     with open(filename, "rb") as file:
-        bot.send_document(chat_id=chat_id, document=open(filename, 'rb'))
+        bot.send_document(chat_id=chat_id, document=file)
 
 
 if __name__ == "__main__":

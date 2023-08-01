@@ -18,7 +18,7 @@ if __name__ == "__main__":
         for image in images:
             filename = '{}/{}'.format(photo_dir, image)
             with open(filename, "rb") as file:
-                bot.send_document(chat_id=chat_id, document=open(filename, 'rb'))
+                bot.send_document(chat_id=chat_id, document=file)
             time.sleep(int(post_interval))
         random.shuffle(images)
 

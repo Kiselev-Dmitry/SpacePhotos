@@ -6,12 +6,8 @@ from dotenv import load_dotenv
 from file_operations import save_file
 
 
-def fetch_spacex_last_launch(photo_dir):
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-launch_id', default='latest',
-                        help="input launch_id for loading of photos (default - latest)")
-    args = parser.parse_args()
-    spacex_url = "https://api.spacexdata.com/v5/launches/{}".format(args.launch_id)
+def fetch_spacex_last_launch(photo_dir, launch_id):
+    spacex_url = "https://api.spacexdata.com/v5/launches/{}".format(launch_id)
     response = requests.get(spacex_url)
     response.raise_for_status()
     images = response.json()["links"]["flickr"]["original"]
@@ -26,4 +22,10 @@ def fetch_spacex_last_launch(photo_dir):
 if __name__ == "__main__":
     load_dotenv()
     photo_dir = os.environ["DIR_WITH_PHOTOS"]
-    fetch_spacex_last_launch(photo_dir)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-launch_id', default='latest',
+                        help="this script downloads photos of specified SPACEX launch."
+                             " Input launch_id after '-launch_id' (default - latest launch)")
+    args = parser.parse_args()
+    launch_id = args.launch_id
+    fetch_spacex_last_launch(photo_dir, launch_id)
