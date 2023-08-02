@@ -22,10 +22,16 @@ def fetch_spacex_last_launch(photo_dir, launch_id):
 if __name__ == "__main__":
     load_dotenv()
     photo_dir = os.environ["DIR_WITH_PHOTOS"]
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description="""
+                    This script downloads photos of specified SPACEX launch.
+                    User must indicate launch id in command line like this:
+                    'python fetch_spacex_images.py -launch_id 5eb87d47ffd86e000604b38a'.
+                    If no launch indicated script downloads latest launch.
+                    Files will be downloaded in directory, determined by DIR_WITH_PHOTOS in .env.""")
     parser.add_argument('-launch_id', default='latest',
-                        help="this script downloads photos of specified SPACEX launch."
-                             " Input launch_id after '-launch_id' (default - latest launch)")
+                        help="Input launch_id after '-launch_id' (default - latest launch)")
     args = parser.parse_args()
     launch_id = args.launch_id
     fetch_spacex_last_launch(photo_dir, launch_id)
